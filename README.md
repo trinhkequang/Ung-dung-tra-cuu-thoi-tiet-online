@@ -20,179 +20,158 @@
 </div>
 
 
-🌤 Ứng Dụng Tra Cứu Thời Tiết Online
 
-📖 Giới thiệu
+# 🌦️ Ứng dụng Dự báo Thời tiết Online (UDP Client–Server)
 
-Ứng dụng Tra Cứu Thời Tiết Online là chương trình Java Desktop giúp người dùng tra cứu thông tin thời tiết hiện tại của bất kỳ thành phố nào thông qua giao thức UDP.
-Người dùng chỉ cần nhập tên thành phố, chương trình sẽ gửi yêu cầu đến server thời tiết qua cổng UDP, nhận phản hồi dạng JSON và hiển thị kết quả bằng tiếng Việt một cách trực quan, rõ ràng.
+## 📖 1. Giới thiệu hệ thống  
 
-Ứng dụng được thiết kế với:
+### 🎯 Mục tiêu dự án
+- Xây dựng ứng dụng **dự báo thời tiết online** theo mô hình **Client–Server** sử dụng **UDP Socket**.  
+- Giúp sinh viên nắm vững kiến thức về **lập trình mạng** (Sockets, DatagramPacket, DatagramSocket).  
+- Cung cấp giao diện đồ họa trực quan bằng **Java Swing GUI**.  
+- Hiển thị dữ liệu thời tiết sinh động, kèm theo **biểu đồ (JFreeChart)** và **cảnh báo thông minh**.  
 
-Giao diện hiện đại, màu sắc hài hòa, hỗ trợ biểu tượng cảm xúc (emoji).
+### ⚙️ Cách hoạt động  
+- **Server**: nhận yêu cầu từ Client, gọi API **OpenWeatherMap**, xử lý dữ liệu và trả về JSON.  
+- **Client**: gửi yêu cầu thời tiết/dự báo, nhận dữ liệu JSON, hiển thị trực quan qua giao diện và biểu đồ.  
 
-Cơ chế truyền thông không kết nối (connectionless): chỉ gửi/nhận gói tin mà không cần thiết lập kết nối phức tạp.
+---
 
-Khả năng hoạt động đa nền tảng (Windows, Linux, macOS) miễn là có Java Runtime.
+## 🏗️ 2. Kiến trúc hệ thống  
 
-🛠️ Công nghệ sử dụng
+Ứng dụng được thiết kế theo mô hình **Client–Server** với giao thức **UDP**.  
 
-Ngôn ngữ: Java 11 trở lên
+- **Client**:  
+  - Giao diện người dùng (Java Swing).  
+  - Cho phép nhập thành phố, gửi yêu cầu dự báo thời tiết.  
+  - Hiển thị dữ liệu trả về dưới dạng văn bản, biểu đồ, cảnh báo.  
 
-Thư viện chuẩn Java:
+- **Server**:  
+  - Lắng nghe yêu cầu từ Client qua UDP.  
+  - Gọi API OpenWeatherMap (HTTP/JSON).  
+  - Xử lý dữ liệu, đóng gói JSON, gửi trả kết quả về Client.  
 
-java.net cho UDP socket (DatagramSocket, DatagramPacket)
+### 🔗 Sơ đồ hệ thống  
 
-javax.swing cho giao diện đồ họa
+```text
++------------------+           UDP            +------------------+          HTTP/API           +---------------------+
+|     CLIENT       |  <-------------------->  |     SERVER       |  <----------------------->  | OpenWeatherMap API  |
+| (Java Swing GUI) |                          | (UDP + JSON)     |                            |   (Weather Data)    |
++------------------+                          +------------------+                            +---------------------+
+| - Nhập thành phố                            | - Xử lý yêu cầu                               | - Trả về dữ liệu    |
+| - Hiển thị biểu đồ & cảnh báo               | - Gọi API OWM                                 |   thời tiết & dự báo |
++---------------------------------------------------------------------------------------------------------------+
+```
 
-java.nio.charset.StandardCharsets cho mã hóa UTF-8
 
-Kiến trúc client-server:
+👉 Với kiến trúc này, hệ thống vừa **nhẹ, nhanh, dễ triển khai**, vừa đảm bảo tính **thực tế và trực quan**.  
 
-Client: ứng dụng Swing hiện tại
+---
 
-Server: dịch vụ UDP trả về dữ liệu thời tiết JSON (có thể do bạn tự triển khai)
+## 🔧 3. Ngôn ngữ lập trình & Công nghệ sử dụng  
 
-JSON Handling: Xử lý chuỗi JSON thuần túy (replace key, format text)
+- **Ngôn ngữ:** Java 8+  
+- **Giao diện:** Java Swing (JFrame, JPanel, JComboBox, JTabbedPane, …)  
+- **Giao thức mạng:** UDP (DatagramSocket, DatagramPacket)  
+- **Biểu đồ:** JFreeChart (LineChart hiển thị dự báo nhiệt độ)  
+- **API:** OpenWeatherMap (RESTful API trả về JSON)  
+- **IDE phát triển:** Eclipse IDE / IntelliJ IDEA  
 
-✨ Chức năng nổi bật
+---
 
-Tra cứu thời tiết hiện tại
+## 🚀 4. Hướng dẫn cài đặt & chạy dự án trên Eclipse  
 
-Người dùng nhập tên thành phố.
+### 1️⃣ Chuẩn bị  
+- Cài đặt **Java JDK 8+**  
+- Cài đặt **Eclipse IDE** hoặc **IntelliJ IDEA**  
+- Tải source code:  
 
-Ứng dụng gửi gói tin UDP chứa yêu cầu dạng REQ|<id>|<city>.
+git clone https://github.com/ApheliosQ/WeatherUDP.git  
 
-Nhận lại gói tin phản hồi từ server với dữ liệu JSON, ví dụ:
+---
 
-{ "temp":28.4, "dt_txt":"2025-09-19 12:00:00", "desc":"mây rải rác" }
+### 2️⃣ Chạy Server  
+- Mở Eclipse → Import > Existing Projects into Workspace  
+- Mở file **WeatherServerUDP.java** trong package `server`  
+- Kiểm tra `SERVER_PORT` (mặc định: `5000`)  
+- Chạy chương trình (**Run As > Java Application**)  
 
+➡ Server bắt đầu lắng nghe các Client.  
 
-Tự động dịch các khóa sang tiếng Việt:
+---
 
-temp → Nhiệt độ
+### 3️⃣ Chạy Client  
+- Mở file **WeatherClientUDP.java** trong package `client`  
+- Kiểm tra `SERVER_ADDRESS` và `SERVER_PORT` trùng với Server  
+- Chạy chương trình (**Run As > Java Application**)  
+- Nhập tên thành phố (VD: Hà Nội, Đà Nẵng, Hồ Chí Minh)  
 
-dt_txt → Thời gian
+➡ Client hiển thị dữ liệu **thời tiết hiện tại** và **dự báo 5 ngày** dưới dạng **biểu đồ + cảnh báo thông minh**.  
 
-desc → Tình trạng
+---
 
-Giao diện trực quan & thân thiện
+## ✨ 5. Các tính năng nổi bật  
 
-Sử dụng Nimbus Look & Feel để tạo phong cách hiện đại.
+- 🌍 **Tìm kiếm thành phố**: nhập tên bất kỳ để tra cứu thời tiết.  
+- 🌡️ **Thời tiết hiện tại**: nhiệt độ, độ ẩm, gió, áp suất, feels-like.  
+- 📊 **Dự báo ngắn hạn**: hiển thị biểu đồ nhiệt độ – feels-like trong 6 mốc giờ.  
+- 📅 **Dự báo 5 ngày**: hiển thị nhiệt độ Min/Max, tình trạng mưa/nắng/mây.  
+- ⚠️ **Cảnh báo thông minh**: gợi ý khi trời nắng gắt, mưa lớn hoặc rét.  
+- 🌙 **Chế độ Dark/Light Mode**: thay đổi giao diện ngay trên Client.  
+- 🗺️ **Tích hợp Google Maps**: mở bản đồ tại thành phố đang tra cứu.  
 
-Màu nền xanh nhạt dịu mắt, hỗ trợ emoji 🌤 ☀ 🌧.
+---
 
-Xử lý mạng ổn định
+## 🖼️ 6. Giao diện minh họa  
 
-Tự động thử lại (retry) tối đa 3 lần nếu hết thời gian chờ.
+### 🖼️ Giao diện dự án
 
-Hiển thị thông báo rõ ràng khi có lỗi hoặc không nhận được phản hồi.
+Ứng dụng **Dự báo thời tiết online (UDP Client–Server)** được thiết kế trực quan với **3 tab chính**:
 
-Đa nền tảng
+- **Thời tiết hiện tại**: hiển thị nhiệt độ, độ ẩm, áp suất, tốc độ gió, tình trạng mây, cùng cảnh báo thông minh.  
+- **Dự báo 5 ngày**: biểu đồ trực quan (Min/Max) và danh sách dự báo chi tiết theo từng ngày.  
+- **Bản đồ**: mở Google Maps tại thành phố mà người dùng nhập, giúp định vị dễ dàng.  
 
-Chạy được trên mọi hệ điều hành hỗ trợ Java: Windows, macOS, Linux.
+Ngoài ra, ứng dụng có tích hợp **biểu đồ JFreeChart** để trực quan hóa xu hướng nhiệt độ theo nhiều mốc giờ.  
 
-📡 Giao thức truyền thông
+<div align="center">
 
-Loại: UDP – User Datagram Protocol
+  <img width="1916" height="1017" alt="màn hình chính" src="https://github.com/user-attachments/assets/b6b60990-e977-48b6-be0a-5fd78e48d0b1" />
+ 
+  <p><b>Hình 1:</b> Tab "Thời tiết hiện tại" – hiển thị thông tin chi tiết và cảnh báo.</p>
 
-Cổng mặc định: 5000
+ <img width="1918" height="1015" alt="dự báo 5 ngày" src="https://github.com/user-attachments/assets/1f479f32-1880-46b1-b340-7d34d24f34bd" />
 
-Định dạng gói tin:
+  <p><b>Hình 2:</b> Tab "Dự báo 5 ngày" – biểu đồ và dự báo chi tiết cho từng ngày.</p>
 
-Yêu cầu (Client → Server):
+<img width="1918" height="1018" alt="bản đồ" src="https://github.com/user-attachments/assets/6ca89db5-e14f-4742-b674-c5fc75a302be" />
 
-REQ|<id>|<city>
+  <p><b>Hình 3:</b> Tab "Bản đồ" – hiển thị vị trí thành phố trên Google Maps.</p>
 
+<img width="1918" height="1012" alt="bản đồ 2" src="https://github.com/user-attachments/assets/f03e8d41-fa5c-4164-b5aa-ab4f07755769" />
 
-REQ: loại yêu cầu (thời tiết hiện tại)
+  <p><b>Hình 4:</b> Khi ấn tìm bản đồ và ra nơi mà bạn muốn tìm</p>
 
-<id>: số ngẫu nhiên để nhận dạng phiên giao tiếp
+</div>
 
-<city>: tên thành phố cần tra cứu
 
-Phản hồi (Server → Client):
+---
 
-RES|<id>|<payload JSON>
+## 🔮 7. Hướng phát triển trong tương lai  
 
+- ⛈️ Tích hợp dự báo **7 ngày / 14 ngày**.  
+- 📱 Phát triển ứng dụng di động (Android).  
+- 🌍 Hỗ trợ đa ngôn ngữ (Tiếng Việt, Tiếng Anh, …).  
+- 🔔 Thêm tính năng **gửi thông báo cảnh báo thời tiết**.  
+- 💾 Lưu lịch sử tìm kiếm và tùy chỉnh giao diện.  
 
-RES: phản hồi
+---
 
-<id>: khớp với id đã gửi
+## 📬 8. Liên hệ  
 
-<payload JSON>: chuỗi JSON chứa thông tin thời tiết
+👨‍💻 **Người thực hiện:** *Trịnh Kế Quang*  
+✉️ **Email:** *trinhquang01032004@gmail.com*  
+📞 **Số điện thoại:** *0966678165*  
 
-Cơ chế an toàn:
-
-Kiểm tra id để đảm bảo gói tin trả về chính xác với yêu cầu đã gửi.
-
-Sử dụng timeout 5 giây, thử lại tối đa 3 lần.
-
-🧩 Hướng dẫn cài đặt và chạy
-
-1️⃣ Chuẩn bị
-
-Java JDK 11+: tải và cài đặt từ https://adoptium.net
- hoặc trang chính thức của Oracle.
-
-IDE: khuyến nghị sử dụng IntelliJ IDEA, Eclipse hoặc VS Code (cài Java Extension Pack).
-
-Đảm bảo có một Server UDP đang chạy (ví dụ server mẫu do bạn hoặc nhóm bạn cung cấp).
-
-2️⃣ Tải mã nguồn
-git clone https://github.com/trinhkequang/Ungdungtracuuthoitietonline.git
-cd Ungdungtracuuthoitietonline
-
-3️⃣ Mở dự án
-
-Mở IDE, chọn Import Project → Existing Maven/Gradle/Plain Project (tùy cấu trúc).
-
-Chỉ định JDK đã cài đặt.
-
-4️⃣ Chạy ứng dụng Client
-
-Trong IDE, mở file src/client/WeatherClientUDP.java.
-
-Nhấn Run hoặc Shift + F10 (IntelliJ) để chạy chương trình.
-
-Giao diện ứng dụng sẽ hiển thị.
-
-5️⃣ Sử dụng
-
-Bước 1: Nhập địa chỉ Server host (mặc định localhost nếu server chạy trên cùng máy).
-
-Bước 2: Nhập Tên thành phố (ví dụ: Hanoi, London, Tokyo).
-
-Bước 3: Bấm nút ☀ Hiện tại để gửi yêu cầu.
-
-Bước 4: Xem kết quả hiển thị trong vùng Kết quả.
-
-🧪 Ví dụ dữ liệu phản hồi
-
-Dữ liệu JSON trả về từ server có dạng:
-
-{
-  "temp": 29.3,
-  "dt_txt": "2025-09-19 12:00:00",
-  "desc": "mây rải rác"
-}
-
-
-Sau khi ứng dụng xử lý sẽ hiển thị:
-
-{
-  "Nhiệt độ": 29.3,
-  "Thời gian": "2025-09-19 12:00:00",
-  "Tình trạng": "mây rải rác"
-}
-
-🖼️ Giao diện minh họa
-
-
-<img width="602" height="466" alt="Ảnh1" src="https://github.com/user-attachments/assets/c64e3b6b-f53a-401a-8f9e-7dc729990d7a" />
-
-📬 Liên hệ
-
-Tác giả: Trịnh Kế Quang
-
-Email: trinhkequang01032004@gmail.com
+© 2025 Faculty of Information Technology, Đại Nam University. All rights reserved.
+```

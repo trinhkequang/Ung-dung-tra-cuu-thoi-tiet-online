@@ -21,7 +21,7 @@
 
 
 
-# 🌦️ Ứng dụng Dự báo Thời tiết Online (UDP Client–Server)
+# 🌦️ Ứng dụng dự báo thời tiết online (UDP Client–Server)
 
 ## 📖 1. Giới thiệu hệ thống  
 

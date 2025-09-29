@@ -86,7 +86,8 @@
 - Cài đặt **Eclipse IDE** hoặc **IntelliJ IDEA**  
 - Tải source code:  
 
-git clone https://github.com/ApheliosQ/WeatherUDP.git  
+git clone https://github.com/trinhkequang/Ung-dung-tra-cuu-thoi-tiet-online.git
+
 
 ---
 

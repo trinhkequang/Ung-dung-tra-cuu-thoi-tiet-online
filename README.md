@@ -137,11 +137,13 @@ Ngoài ra, ứng dụng có tích hợp **biểu đồ JFreeChart** để trực
 
 <div align="center">
 
-  <img width="1916" height="1017" alt="màn hình chính" src="https://github.com/user-attachments/assets/b6b60990-e977-48b6-be0a-5fd78e48d0b1" />
+  <img width="1916" height="1017" alt="màn hình chính" src="https://github.com/user-attachments/assets/602ae8c4-4c42-41f4-9e81-4aee7045cd4c" />
+
  
   <p><b>Hình 1:</b> Tab "Thời tiết hiện tại" – hiển thị thông tin chi tiết và cảnh báo.</p>
 
- <img width="1918" height="1015" alt="dự báo 5 ngày" src="https://github.com/user-attachments/assets/1f479f32-1880-46b1-b340-7d34d24f34bd" />
+ <img width="1918" height="1015" alt="dự báo 5 ngày" src="https://github.com/user-attachments/assets/6d30a64e-ca44-46ee-92a8-d2d3001fc848" />
+
 
   <p><b>Hình 2:</b> Tab "Dự báo 5 ngày" – biểu đồ và dự báo chi tiết cho từng ngày.</p>
 
